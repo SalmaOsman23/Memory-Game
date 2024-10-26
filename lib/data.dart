@@ -1,34 +1,58 @@
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
+import 'package:memory_game/utils/app_assets.dart';
 
-List<String> fillSourceArray() {
+// List<String> fillAnimalSourceArray() {
+//   return [
+//     'assets/animals/images/cow.jpg',
+//     'assets/animals/images/cow.jpg',
+//     'assets/animals/images/giraffe.png',
+//     'assets/animals/images/giraffe.png',
+//     'assets/animals/images/monkey.jpg',
+//     'assets/animals/images/monkey.jpg',
+//     'assets/animals/images/panda.jpg',
+//     'assets/animals/images/panda.jpg',
+//     'assets/animals/images/tiger.png',
+//     'assets/animals/images/tiger.png',
+//     'assets/animals/images/wolf.jpg',
+//     'assets/animals/images/wolf.jpg',
+//     'assets/animals/images/turtle.jpg',
+//     'assets/animals/images/turtle.jpg',
+//     'assets/animals/images/zebra.png',
+//     'assets/animals/images/zebra.png',
+//     'assets/animals/images/elephant.jpg',
+//     'assets/animals/images/elephant.jpg',
+//   ];
+// }
+List<String> fillAnimalSourceArray() {
   return [
-    'assets/images/cow.jpg',
-    'assets/images/cow.jpg',
-    'assets/images/giraffe.png',
-    'assets/images/giraffe.png',
-    'assets/images/monkey.jpg',
-    'assets/images/monkey.jpg',
-    'assets/images/panda.jpg',
-    'assets/images/panda.jpg',
-    'assets/images/tiger.png',
-    'assets/images/tiger.png',
-    'assets/images/wolf.jpg',
-    'assets/images/wolf.jpg',
-    'assets/images/cow.jpg',
-    'assets/images/cow.jpg',
-    'assets/images/cow.jpg',
-    'assets/images/cow.jpg',
-    'assets/images/cow.jpg',
-    'assets/images/cow.jpg',
+    AppAssets.cowImage,
+    AppAssets.cowImage,
+    AppAssets.giraffeImage,
+    AppAssets.giraffeImage,
+    AppAssets.giraffeImage,
+    AppAssets.giraffeImage,
+    AppAssets.pandaImage,
+    AppAssets.pandaImage,
+    AppAssets.tigerImage,
+    AppAssets.tigerImage,
+    AppAssets.wolfImage,
+    AppAssets.wolfImage,
+    AppAssets.turtleImage,
+    AppAssets.turtleImage,
+    AppAssets.zebraImage,
+    AppAssets.zebraImage,
+    AppAssets.eggplantImage,
+    AppAssets.eggplantImage,
   ];
 }
 
 enum Level { Hard, Medium, Easy }
+enum Type { Animals, Fruits, Vegetables }
 
 List getSourceArray(Level level) {
   List<String> levelList = [];
-  List sourceArray = fillSourceArray();
+  List sourceArray = fillAnimalSourceArray();
   if (level == Level.Hard) {
     sourceArray.forEach((element) {
       levelList.add(element);
