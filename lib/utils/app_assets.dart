@@ -31,5 +31,9 @@ class AppAssets {
   static const String peasImage = "assets/images/vegetables/peas.jpg";
   static const String potatoImage = "assets/images/vegetables/potato.jpg";
   static const String tomatoImage = "assets/images/vegetables/tomato.jpg";
+
+  //!General Images
+  static const String memoryTitleImage = "assets/images/title.svg";
+  static const String cheeringDude = "assets/images/cheering-dude.gif";
   
 }

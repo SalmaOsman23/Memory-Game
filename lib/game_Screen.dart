@@ -1,12 +1,15 @@
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:memory_game/level_screen.dart';
+import 'package:memory_game/utils/app_assets.dart';
 import 'data.dart'; // Ensure this file contains your Level and related methods
 import 'dart:async';
 
 class GameScreen extends StatefulWidget {
   final Level level;
-  const GameScreen({required this.level});
+  final Type type;
+  const GameScreen({required this.level, required this.type});
 
   @override
   _GameScreenState createState() => _GameScreenState();
@@ -14,6 +17,7 @@ class GameScreen extends StatefulWidget {
 
 class _GameScreenState extends State<GameScreen> {
   Level get level => widget.level; // Access the level from the widget
+  Type get type => widget.type;
 
   int _previousIndex = -1;
   bool _flip = false;
@@ -24,7 +28,7 @@ class _GameScreenState extends State<GameScreen> {
   int _left = 0;
   bool _isFinished = false;
   List<String> _data = [];
-  
+
   List<bool> _cardFlips = [];
   List<GlobalKey<FlipCardState>> _cardStateKeys = [];
 
@@ -32,8 +36,8 @@ class _GameScreenState extends State<GameScreen> {
     return Container(
       decoration: BoxDecoration(
           color: Colors.grey[100],
-          boxShadow: [
-            const BoxShadow(
+          boxShadow: const [
+            BoxShadow(
               color: Colors.black45,
               blurRadius: 3,
               spreadRadius: 0.8,
@@ -60,7 +64,7 @@ class _GameScreenState extends State<GameScreen> {
 
   void restart() {
     startTimer();
-    _data = List<String>.from(getSourceArray(level)); // Use 'level' here
+    _data = List<String>.from(getSourceArray(level, type)); // Use 'level' here
     _cardFlips = getInitialItemState(level);
     _cardStateKeys = getCardStateKeys(level);
     _time = 5;
@@ -92,28 +96,71 @@ class _GameScreenState extends State<GameScreen> {
     return _isFinished
         ? Scaffold(
             body: Center(
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    restart();
-                  });
-                },
-                child: Container(
-                  height: 50,
-                  width: 200,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "You Did It".toUpperCase(),
+                    style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 34),
                   ),
-                  child: const Text(
-                    "Replay",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontWeight: FontWeight.w500),
+                  const SizedBox(height: 20),
+                  Image.asset(
+                    AppAssets.cheeringDude,
+                    width: 200,
                   ),
-                ),
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        restart();
+                      });
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 200,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.orange,
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: const Text(
+                        "Replay",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LevelScreen()));
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 200,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: const Text(
+                        "Home Screen",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           )
@@ -139,7 +186,8 @@ class _GameScreenState extends State<GameScreen> {
                       child: GridView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
                         ),
                         itemBuilder: (context, index) => _start
@@ -152,18 +200,24 @@ class _GameScreenState extends State<GameScreen> {
                                   } else {
                                     _flip = false;
                                     if (_previousIndex != index) {
-                                      if (_data[_previousIndex] != _data[index]) {
+                                      if (_data[_previousIndex] !=
+                                          _data[index]) {
                                         _wait = true;
 
-                                        Future.delayed(const Duration(milliseconds: 1500), () {
+                                        Future.delayed(
+                                            const Duration(milliseconds: 1500),
+                                            () {
                                           _cardStateKeys[_previousIndex]
-                                              .currentState?.toggleCard();
+                                              .currentState
+                                              ?.toggleCard();
                                           _previousIndex = index;
                                           _cardStateKeys[_previousIndex]
                                               .currentState
                                               ?.toggleCard();
 
-                                          Future.delayed(const Duration(milliseconds: 160), () {
+                                          Future.delayed(
+                                              const Duration(milliseconds: 160),
+                                              () {
                                             setState(() {
                                               _wait = false;
                                             });
@@ -176,8 +230,11 @@ class _GameScreenState extends State<GameScreen> {
                                         setState(() {
                                           _left -= 1;
                                         });
-                                        if (_cardFlips.every((t) => t == false)) {
-                                          Future.delayed(const Duration(milliseconds: 160), () {
+                                        if (_cardFlips
+                                            .every((t) => t == false)) {
+                                          Future.delayed(
+                                              const Duration(milliseconds: 160),
+                                              () {
                                             setState(() {
                                               _isFinished = true;
                                               _start = false;
@@ -195,8 +252,8 @@ class _GameScreenState extends State<GameScreen> {
                                   decoration: BoxDecoration(
                                       color: Colors.grey,
                                       borderRadius: BorderRadius.circular(5),
-                                      boxShadow: [
-                                        const BoxShadow(
+                                      boxShadow: const [
+                                        BoxShadow(
                                           color: Colors.black45,
                                           blurRadius: 3,
                                           spreadRadius: 0.8,
